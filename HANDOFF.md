@@ -1,6 +1,6 @@
 # HANDOFF — Sano (sách nói tiếng Việt)
 
-Cập nhật: 30/09/2026 chiều · Phiên bản đang phát hành: **0.1.20** · `main` đã có đủ 0.1.21 (MCP), CHANGELOG viết sẵn, **chưa phát hành, chưa push**
+Cập nhật: 30/09/2026 chiều · Phiên bản đang phát hành: **0.1.21** (Latest, công khai 30/09, CI xanh 3 hệ + thử bộ cài Windows có sano-mcp.exe) · `main` = bản phát hành
 
 Phiên mới: đọc file này + `README.md` + `CHANGELOG.md` là đủ nắm trạng thái.
 
@@ -31,7 +31,8 @@ Giọng đọc VieNeu-TTS v3 Turbo chạy ngay trên máy, không cần API key.
 
 ## 3c. Phiên 30/09 — 0.1.21: tìm trong mục lục + Kết nối AI (MCP)
 
-RC cuối trên máy anh Việt: `desktop/build/bin/Sano.app` = **0.1.21-rc.4** (anh test OK tới M3). Chưa phát hành.
+Đã phát hành 0.1.21. RC cuối trên máy anh: `desktop/build/bin/Sano.app` = 0.1.21-rc.5 (bản rc sau đánh 0.1.22-rc.N).
+VirusTotal lần này: bộ cài Windows 3 phần mềm báo nhầm, bản zip 2 (trước là 2; có thêm file Go chưa ký sano-mcp.exe).
 
 - **Tìm trong Mục lục** màn nghe (`PlayerView.vue`, `lib/find.ts` `tocMatches` / `markParts`): bỏ dấu, khớp đầu từ, số khớp trọn, ⌘F.
 - **MCP** (kế hoạch + quyết định: memory `sano-mcp-ke-hoach`; hướng dẫn người dùng `docs/ket-noi-ai.md`):
@@ -50,7 +51,7 @@ RC cuối trên máy anh Việt: `desktop/build/bin/Sano.app` = **0.1.21-rc.4** 
   - Đóng gói (M4): `build.sh` build sano-mcp (mac lipo, Windows trước wails build để NSIS kèm), ký lại app mac;
     NSIS đổi tên sano-mcp.exe đang bị khoá (.cu-*); bản zip + tự cập nhật portable kèm cầu nối. CI Windows kiểm.
   - Điều khoản mục 1 sửa câu cam kết (trước khi lưu vào Thư viện; sách AI ở khu chờ). Giữ Phiên bản 2. Anh nhờ luật sư xem.
-- **Còn:** kết nối từ xa (trạm Cloudflare trên sanobook.com, mã ghép 40 ký tự 2 phút, OAuth), chưa làm. Bộ cài Windows
+- **Còn (anh chốt để giai đoạn sau):** kết nối từ xa (trạm Cloudflare trên sanobook.com, mã ghép 40 ký tự 2 phút, OAuth), chưa làm. Bộ cài Windows
   chưa chạy thử trên máy thật (chỉ CI). Mở app còn sách ở khu chờ thì popup tự bật nhắc (anh chưa phản hồi).
 - Test dev không đụng thư viện thật: worktree scratchpad + `SANO_HOME=<tạm>`; cổng 39390 bận (RC anh đang mở) thì
   bản dev lấy cổng khác, cầu nối đọc cổng từ `<SANO_HOME>/.mcp/local.json`.
