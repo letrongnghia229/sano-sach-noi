@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.22 (05/10/2026)
+
+### Tính năng
+- **Nạp sách điện tử EPUB:** ngoài file Word, Sano nhận thẳng file `.epub`. Tên sách, chương, mục lấy từ mục lục có sẵn trong sách. Không đọc trang bìa, trang mục lục, chú thích cuối trang. Sách có DRM bị từ chối
+
 ## v0.1.21 (30/09/2026)
 
 ### Tính năng
