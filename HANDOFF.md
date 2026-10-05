@@ -1,6 +1,6 @@
 # HANDOFF — Sano (sách nói tiếng Việt)
 
-Cập nhật: 30/09/2026 chiều · Phiên bản đang phát hành: **0.1.21** (Latest, công khai 30/09, CI xanh 3 hệ + thử bộ cài Windows có sano-mcp.exe) · `main` = bản phát hành
+Cập nhật: 05/10/2026 · Phiên bản đang phát hành: **0.1.23** (Latest, công khai 05/10, CI xanh 3 hệ + smoke) · `main` = bản phát hành
 
 Phiên mới: đọc file này + `README.md` + `CHANGELOG.md` là đủ nắm trạng thái.
 
@@ -11,7 +11,7 @@ Giọng đọc VieNeu-TTS v3 Turbo chạy ngay trên máy, không cần API key.
 
 | Thư mục | Nội dung |
 |---|---|
-| `internal/bookmaker/` | Lõi làm sách: đọc docx, chuẩn hoá lời đọc (tiếng Việt), từ điển cách đọc, gọi bộ đọc, đóng gói zip, sửa sách (`rework.go`), bìa (`coverfit.go`) |
+| `internal/bookmaker/` | Lõi làm sách: đọc docx / epub (`epub.go`) / pdf (`pdf.go` dựng sách, `pdfium.go` đọc bằng PDFium WASM), chuẩn hoá lời đọc (tiếng Việt), từ điển cách đọc, gọi bộ đọc, đóng gói zip, sửa sách (`rework.go`), bìa (`coverfit.go`) |
 | `desktop/` | App Wails. `maker.go` tạo sách, `rework.go` sửa sách, `dict.go` từ điển, `thumb.go` bìa thu nhỏ, `media.go` phục vụ mp3/bìa |
 | `desktop/internal/library/` | Thư viện `~/Sano/Sach`: đọc/ghi metadata, gói zip, nhập gói, sửa sách, từ điển |
 | `desktop/internal/setup/`, `tts/` | Cài bộ đọc VieNeu (uv + Python + mô hình), kiểm tra, gỡ |
@@ -27,7 +27,31 @@ Giọng đọc VieNeu-TTS v3 Turbo chạy ngay trên máy, không cần API key.
 - QA giao diện: `agent-browser` CLI (xem quy tắc chung). Lưu ý: `agent-browser fill` không kích sự kiện input của Vue → đặt `value` + `dispatchEvent(new Event('input'))` bằng `eval`.
 - Build RC tại máy: `scripts/release/build.sh 0.1.18-rc.1 darwin/arm64` → `desktop/build/bin/Sano.app` (wails dev dùng chung thư mục này, `-clean` xoá nó).
 - Phát hành: cập nhật `VERSION`, `CHANGELOG.md` (ngắn, hộp cập nhật của bản cũ hiện đoạn này), link tải trong `README.md` → commit `chore: phát hành vX.Y.Z` → push `main` → `git tag -a vX.Y.Z` + push tag → chờ CI → `gh release edit vX.Y.Z --draft=false --latest`.
+- Phiên Claude trên web (cloud): đẩy được nhánh và `main`, **không đẩy được tag** (proxy ngắt kết nối), không công khai được release (công cụ GitHub chỉ đọc). Anh tự đẩy tag từ `~/Claude-Code/sano-sach-noi-public` (thư mục `sano-sach-noi` cạnh đó là repo cũ `-archive`). Công khai trên điện thoại: mở bằng trình duyệt, **Edit bản nháp "Sano X.Y.Z" do CI tạo** rồi Publish — đừng tạo release mới từ tag (05/10 đã lỡ tạo một bản rỗng, không có file, phải xoá).
 - VirusTotal luôn báo 2 phần mềm nhầm bản Windows (đã có từ 0.1.16, file Go chưa ký), không chặn phát hành.
+
+## 3d. Phiên 05/10 (Claude web) — 0.1.23: nạp EPUB + PDF
+
+Đã phát hành **0.1.23** (gộp bản nháp 0.1.22 chỉ có EPUB, đã xoá nháp; tag `v0.1.22` còn, bỏ qua). PR đã gộp:
+tanviet12/sano-sach-noi#33 (EPUB), tanviet12/sano-sach-noi#34 (PDF). Issue #28 xong cả EPUB lẫn PDF có chữ (chưa OCR).
+
+- **EPUB** (`internal/bookmaker/epub.go`): đọc theo spine OPF, h1–h6 → Heading; trang không có h lấy tên từ nav/NCX
+  (cả neo `#id`); bỏ bìa / trang chỉ ảnh / nav / chú thích (`epub:type` footnote, noteref) / ruby; h trùng `dc:title`
+  → tên sách; DRM (`encryption.xml` mã hoá nội dung, `rights.xml`, `license.lcpl`) → `ErrProtectedFile`. Đã chạy
+  45 sách mẫu IDPF epub3-samples. Còn lẻ: phần đầu sách gom thành chương "Nội dung" (bỏ tick ở Mục lục), EPUB dàn
+  trang cố định dính chữ giữa dòng, thơ có số dòng đọc cả số.
+- **PDF** (`pdfium.go` + `pdf.go`): PDFium WASM qua go-pdfium + wazero (Go thuần, không CGO, không Python; module
+  không gắn thư mục). Bản dịch máy cache ở `UserCacheDir/Sano/pdfium` (~21 MB; lần đầu ~4 giây, sau ~0,1 giây).
+  Chương/mục từ bookmark, không có thì theo cỡ chữ (cỡ lớn nhất chỉ 1 đoạn ở 2 trang đầu → tên sách). Bỏ đầu/chân
+  trang theo vị trí (2 dòng trên/dưới cùng, trong 12% mép, chữ nhỏ, tách khỏi thân bài, lặp ≥ 30% trang) + số trang.
+  Cảnh báo `LoadWarnings.notes` (`severe` tô đỏ): thiếu bookmark, lỗi phông (≥1% / ≥10% nặng, đếm ký tự Latin-1 mà
+  TCVN3/VNI dùng), trang chỉ ảnh, nhiều cột. Từ chối: không có chữ, lỗi phông ≥ 60%, mật khẩu, cấm trích chữ (cho
+  trích hỗ trợ tiếp cận thì đọc). Giới hạn 256 MB / 5000 trang, cache 3 file, PDFium lỗi thì tự lấy phiên mới.
+  Fixture test `internal/bookmaker/testdata/pdf/` (tạo bằng Chromium + pypdf). Bản cài nặng thêm ~4 MB/hệ (~9 MB mac universal).
+- App: `bookmaker.IsSourceFile` (.docx/.epub/.pdf) dùng ở hộp chọn file, kéo thả, CLI; bước 2 đổi tên "Nạp file".
+- **Chưa thử với PDF / EPUB tiếng Việt thật** (cloud chặn tải sách). Anh hứa gửi PDF test → chạy lại, chỉnh ngưỡng
+  lọc đầu trang / đoán tiêu đề nếu cần.
+- Issue mới: #32 clone giọng (để dành).
 
 ## 3c. Phiên 30/09 — 0.1.21: tìm trong mục lục + Kết nối AI (MCP)
 
@@ -181,6 +205,12 @@ RC mới nhất đang chạy trên máy anh Việt: `desktop/build/bin/Sano.app`
   ảnh bìa tự chọn lớn hơn 1200×1600 thì thu nhỏ giữ tỉ lệ.
 
 ## 5. Việc còn tồn
+
+- MCP chưa nhận file EPUB/PDF (`create_book` chỉ nhận văn bản, cố ý không nhận đường dẫn). Hướng đã bàn 05/10:
+  công cụ mới `create_book_from_file` → Sano mở hộp chọn file, người dùng tự chọn, AI không thấy đường dẫn. Để sau.
+- Đề xuất (chưa làm, chờ anh gật): workflow `workflow_dispatch` "Công khai bản phát hành" (gắn tag + publish nháp +
+  xoá nháp cũ) để phiên Claude cloud tự phát hành khi anh bảo, khỏi đẩy tag / bấm tay.
+- PDF scan cần OCR: chưa làm (#28 ghi giai đoạn sau).
 
 - App chưa có nút "Đọc lại cả cuốn" (khi script đọc / bộ đọc đổi, sách cũ không tự đọc lại; hiện phải mượn từ điển
   của cuốn để đánh dấu mục, hoặc chạy tay như mục 3). Tính năng mới → cần wireframe (tab Giọng đọc trong Sửa sách).
