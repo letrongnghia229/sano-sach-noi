@@ -1,6 +1,6 @@
 # HANDOFF — Sano (sách nói tiếng Việt)
 
-Cập nhật: 06/10/2026 · Đang phát hành: **0.1.23** (Latest). **0.1.24** (06/10): tag `v0.1.24` = `5fcb008` đã đẩy, CI đang build → bản nháp "Sano 0.1.24" chờ anh Việt Edit + Publish. Phiên sau: kiểm 0.1.24 đã là Latest, có đủ 6 file (4 bản cài + SHA256SUMS + .sig) · `main` = bản phát hành
+Cập nhật: 06/10/2026 · Phiên bản đang phát hành: **0.1.24** (Latest, công khai 06/10, đủ 6 file, CI xanh 3 hệ + smoke) · `main` = bản phát hành + HANDOFF
 
 Phiên mới: đọc file này + `README.md` + `CHANGELOG.md` là đủ nắm trạng thái.
 
