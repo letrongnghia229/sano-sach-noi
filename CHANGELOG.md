@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.1.24 (06/10/2026)
+
+### Tính năng
+- **Nạp sách điện tử EPUB:** ngoài file Word, Sano nhận thẳng file `.epub`. Tên sách, chương, mục lấy từ mục lục có sẵn trong sách. Không đọc trang bìa, trang mục lục, chú thích cuối trang. Sách có DRM bị từ chối
+- **Nạp file PDF có chữ:** chương, mục lấy từ bookmark (không có thì đoán theo cỡ chữ tiêu đề), tự bỏ đầu trang, chân trang, số trang. PDF dễ đọc sai thì Sano báo ngay lúc nạp, kèm số trang: chữ lỗi phông (TCVN3, VNI), trang chỉ có ảnh, dàn nhiều cột. Bản scan, PDF có mật khẩu hoặc cấm trích chữ bị từ chối
+
+### Sửa lỗi
+- Các màn tạo sách, Thư viện, Giới thiệu ghi đủ Word, EPUB, PDF thay vì chỉ "file Word"
+
 ## v0.1.23 (05/10/2026)
 
 ### Tính năng
