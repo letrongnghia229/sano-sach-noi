@@ -1,6 +1,6 @@
 # HANDOFF — Sano (sách nói tiếng Việt)
 
-Cập nhật: 05/10/2026 · Phiên bản đang phát hành: **0.1.23** (Latest, công khai 05/10); **0.1.24** đã chuẩn bị trên `main` (06/10), chờ đẩy tag · `main` = bản phát hành
+Cập nhật: 06/10/2026 · Đang phát hành: **0.1.23** (Latest). **0.1.24** (06/10): tag `v0.1.24` = `5fcb008` đã đẩy, CI đang build → bản nháp "Sano 0.1.24" chờ anh Việt Edit + Publish. Phiên sau: kiểm 0.1.24 đã là Latest, có đủ 6 file (4 bản cài + SHA256SUMS + .sig) · `main` = bản phát hành
 
 Phiên mới: đọc file này + `README.md` + `CHANGELOG.md` là đủ nắm trạng thái.
 
@@ -29,6 +29,16 @@ Giọng đọc VieNeu-TTS v3 Turbo chạy ngay trên máy, không cần API key.
 - Phát hành: cập nhật `VERSION`, `CHANGELOG.md` (ngắn, hộp cập nhật của bản cũ hiện đoạn này), link tải trong `README.md` → commit `chore: phát hành vX.Y.Z` → push `main` → `git tag -a vX.Y.Z` + push tag → chờ CI → `gh release edit vX.Y.Z --draft=false --latest`.
 - Phiên Claude trên web (cloud): đẩy được nhánh và `main`, **không đẩy được tag** (proxy ngắt kết nối), không công khai được release (công cụ GitHub chỉ đọc). Anh tự đẩy tag từ `~/Claude-Code/sano-sach-noi-public` (thư mục `sano-sach-noi` cạnh đó là repo cũ `-archive`). Công khai trên điện thoại: mở bằng trình duyệt, **Edit bản nháp "Sano X.Y.Z" do CI tạo** rồi Publish — đừng tạo release mới từ tag (05/10 đã lỡ tạo một bản rỗng, không có file, phải xoá).
 - VirusTotal luôn báo 2 phần mềm nhầm bản Windows (đã có từ 0.1.16, file Go chưa ký), không chặn phát hành.
+
+## 3e. Phiên 06/10 (Claude web) — 0.1.24: sửa chữ "chỉ file Word"
+
+- tanviet12/sano-sach-noi#35 (đã gộp): app, trang chủ sanobook.com, trang hướng dẫn, README ghi đủ Word, EPUB, PDF
+  (nút "Tiếp: nạp file", mô tả Cấp 1, đính kèm cho AI "Word hoặc PDF", Thư viện, Giới thiệu, thẻ cuối video). Tiêu đề
+  SEO giữ cụm "file Word" ở đầu: "Tạo sách nói bằng AI từ file Word, PDF, EPUB". Giữ "Word" ở chỗ đúng nghĩa (file
+  Word mẫu, AI trả file Word, Heading trong Word, sách/video mẫu).
+- Issue #28 đã comment tổng kết và đóng (EPUB + PDF có chữ xong; OCR, MCP nhận file để sau).
+- 0.1.24 chỉ sửa chữ nhưng ghi chú **nhắc lại EPUB, PDF ở đầu** (quy tắc mục 3d) để hộp cập nhật vẫn hiện tính năng chính.
+- Còn: mô tả repo trên GitHub (About) vẫn "từ file Word…", anh sửa tay. Workflow tự phát hành (mục 5) vẫn chờ anh gật.
 
 ## 3d. Phiên 05/10 (Claude web) — 0.1.23: nạp EPUB + PDF
 
